@@ -54,7 +54,7 @@ public class UserController {
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email não existe!"));
 	}
 	
-	@GetMapping("/name")
+	@GetMapping("/search")
 	public ResponseEntity<List<UserModel>> findAllByName(
 			@RequestParam(defaultValue = "") String nameUser,
 			@RequestParam(defaultValue = "") String emailUser){
