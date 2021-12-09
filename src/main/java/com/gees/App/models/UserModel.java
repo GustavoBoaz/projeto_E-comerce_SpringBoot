@@ -23,6 +23,10 @@ import javax.persistence.Table;
  * generated;
  * </p>
  * <p>
+ * - token: represents user token column. String; This column is automatically
+ * generated;
+ * </p>
+ * <p>
  * - name: represents user name column. String;
  * </p>
  * <p>
@@ -45,6 +49,7 @@ public class UserModel {
 	// System generated Value
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long idUser;
 	private @SuppressWarnings("deprecation") Long rewards = new Long(0);
+	private String token;
 
 	// User generated Values
 	private String name;
@@ -58,6 +63,14 @@ public class UserModel {
 	// Getters and Setters
 	public Long getIdUser() {
 		return idUser;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	public List<RequestModel> getMyRequests() {
