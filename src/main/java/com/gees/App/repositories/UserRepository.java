@@ -8,32 +8,38 @@ import org.springframework.stereotype.Repository;
 
 import com.gees.App.models.UserModel;
 
+/**
+ * Inteface reponseble for inheriting crud methods
+ * 
+ * @author Boaz
+ * @since 1.0
+ * @see ProductRepository
+ * @see RequestRepository
+ *
+ */
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, Long> {
 
 	/**
-	 * Método utilizado para pesquisar por email na coluna email do bando de dados
+	 * Method used to search by token
 	 * 
-	 * @param emailUser
+	 * @param token
 	 * @return Optional<UserModel>
-	 * @author BORGES
+	 * @author Boaz
 	 * @since 1.0
 	 * 
-	 * @see findAllByNameContainingAndEmailContaining
 	 */
-	Optional<UserModel> findByEmail(String emailUser);
-	
+	Optional<UserModel> findByToken(String token);
+
 	/**
-	 * Método utilizado para pesquisar por emal ou name no bancode dados
+	 * Method used to search by email
 	 * 
-	 * @param name
 	 * @param email
-	 * @return List<UserModel>
- 	 * @author BORGES
+	 * @return Optional<UserModel>
+	 * @author Boaz
 	 * @since 1.0
 	 * 
-	 * @see findByEmail
 	 */
-	List<UserModel> findAllByNameContainingAndEmailContaining(String name, String email);
+	Optional<UserModel> findByEmail(String email);
 
 }
