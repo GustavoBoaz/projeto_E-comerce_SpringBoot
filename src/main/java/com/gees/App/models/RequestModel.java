@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -53,7 +55,7 @@ public class RequestModel {
 
     // System generated Value
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long idRequest;
-    private StatusRequest status = StatusRequest.SCHEDULED;
+    private @Enumerated(EnumType.STRING) StatusRequest status = StatusRequest.SCHEDULED;
     private @JsonFormat(pattern = "yyyy-MM-dd") LocalDate requestDate = LocalDate.now();
     private Float value;
 
