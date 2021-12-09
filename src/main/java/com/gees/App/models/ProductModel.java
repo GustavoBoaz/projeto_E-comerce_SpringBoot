@@ -1,10 +1,14 @@
 package com.gees.App.models;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.gees.App.util.DrinkTypes;
 
 /**
  * "tb_products" table abstraction. This columns is:
@@ -32,6 +36,11 @@ import javax.persistence.Table;
  * <p>
  * - value: represents value product column. Float;
  * </p>
+ * <p>
+ * - typeProduct: represents type product column. ENUM DrinkTypes format
+ * {DISTILLATES, ANISED, ALCOHOLICS, NON_ALCOHOLICS, BITTERS, BEERS, LIQUEURS,
+ * WINES}.
+ * </p>
  * 
  * @author Boaz
  * @since 1.0
@@ -53,10 +62,19 @@ public class ProductModel {
 	private String urlImage;
 	private Long inventory;
 	private Float value;
+	private @Enumerated(EnumType.STRING) DrinkTypes typeProduct;
 
 	// Getters and Setters
 	public Long getIdProduct() {
 		return idProduct;
+	}
+
+	public DrinkTypes getTypeProduct() {
+		return typeProduct;
+	}
+
+	public void setTypeProduct(DrinkTypes typeProduct) {
+		this.typeProduct = typeProduct;
 	}
 
 	public void setIdProduct(Long idProduct) {
