@@ -10,11 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gees.App.util.StatusRequest;
 
 /**
@@ -64,10 +66,15 @@ public class RequestModel {
     // Relations
     @ManyToOne
     @JoinColumn(name = "fk_buyer")
+    @JsonIgnoreProperties("myRequests")
     private UserModel buyer;
 
-    @OneToMany(orphanRemoval = false)
-    @JoinColumn(name = "fk_product")
+    @ManyToMany
+    @JoinTable(
+        name = "request_product", 
+        joinColumns = @JoinColumn(name = "request_id"), 
+        inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @JsonIgnoreProperties("requests")
     private List<ProductModel> products;
 
     // Getters and Setters

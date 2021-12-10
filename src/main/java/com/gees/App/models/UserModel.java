@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * "tb_users" table abstraction. This columns is:
  * 
@@ -58,6 +60,7 @@ public class UserModel {
 
 	// Relations
 	@OneToMany(mappedBy = "buyer", cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties("buyer")
 	private List<RequestModel> myRequests = new ArrayList<>();
 
 	// Getters and Setters

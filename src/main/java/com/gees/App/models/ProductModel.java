@@ -1,13 +1,17 @@
 package com.gees.App.models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gees.App.util.DrinkTypes;
 
 /**
@@ -63,6 +67,10 @@ public class ProductModel {
 	private Long inventory;
 	private Float value;
 	private @Enumerated(EnumType.STRING) DrinkTypes typeProduct;
+
+	@ManyToMany(mappedBy = "products")
+	@JsonIgnoreProperties("products")
+	private List<RequestModel> requests;
 
 	// Getters and Setters
 	public Long getIdProduct() {
