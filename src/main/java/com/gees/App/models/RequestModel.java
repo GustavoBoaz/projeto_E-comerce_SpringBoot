@@ -1,7 +1,6 @@
 package com.gees.App.models;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -69,7 +68,7 @@ public class RequestModel {
 
     @OneToMany(orphanRemoval = false)
     @JoinColumn(name = "fk_product")
-    private List<ProductModel> products = new ArrayList<>();
+    private List<ProductModel> products;
 
     // Getters and Setters
     public Long getIdRequest() {
