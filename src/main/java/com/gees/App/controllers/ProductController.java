@@ -46,7 +46,7 @@ public class ProductController {
     }
 
     @DeleteMapping("{id_product}")
-    public ResponseEntity<?> getUserById(@PathVariable(value = "id_product") Long id){
+    public ResponseEntity<?> deleteById(@PathVariable(value = "id_product") Long id){
         repository.deleteById(id);
         return ResponseEntity.status(200).build();
     }
