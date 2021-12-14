@@ -33,7 +33,8 @@ public class BasicSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/api/v1/user/{id_user}").permitAll()
+				.antMatchers(HttpMethod.POST, "/api/v1/user").permitAll()
+				.antMatchers(HttpMethod.PUT, "/api/v1/user/credentials").permitAll()
 				.anyRequest().authenticated()
 			.and().httpBasic()
 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
