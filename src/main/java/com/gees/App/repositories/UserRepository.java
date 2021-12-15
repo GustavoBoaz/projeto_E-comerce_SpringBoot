@@ -1,5 +1,6 @@
 package com.gees.App.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -40,5 +41,16 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
 	 * 
 	 */
 	Optional<UserModel> findByEmail(String email);
+	
+	/**
+	 * Method used to search by name
+	 * 
+	 * @param email
+	 * @return List<UserModel>
+	 * @author Boaz
+	 * @since 1.0
+	 * 
+	 */
+	List<UserModel> findAllByNameContainingIgnoreCase(String name);
 
 }
