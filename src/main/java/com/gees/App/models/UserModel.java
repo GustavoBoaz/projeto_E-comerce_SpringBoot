@@ -62,6 +62,16 @@ public class UserModel {
 	@OneToMany(mappedBy = "buyer", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("buyer")
 	private List<RequestModel> myRequests = new ArrayList<>();
+	
+	// Constructors
+	public UserModel() {	}
+
+	public UserModel(String name, String email, String password) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.password = password;
+	}
 
 	// Getters and Setters
 	public Long getIdUser() {

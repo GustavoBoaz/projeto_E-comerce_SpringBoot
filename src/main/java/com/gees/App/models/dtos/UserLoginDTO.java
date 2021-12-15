@@ -9,6 +9,13 @@ public class UserLoginDTO {
 	private @NotBlank @Email String email;
 	private @NotBlank @Size(min = 2, max = 25) String password;
 
+	public UserLoginDTO() {	}
+
+	public UserLoginDTO(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+
 	public String getEmail() {
 		return email;
 	}
