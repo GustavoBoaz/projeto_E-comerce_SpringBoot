@@ -105,6 +105,15 @@ public class UserServices {
 		
 	}
 
+	/**
+	 * Public method to get user credentials for authentications.
+	 * 
+	 * @param userDto
+	 * @return ResponseEntity<UserCredentialsDTO>
+	 * @author Boaz
+	 * @since 1.0
+	 * 
+	 */
 	public ResponseEntity<UserCredentialsDTO> getCredentials(@Valid UserLoginDTO userDto) {
 		return repository.findByEmail(userDto.getEmail()).map(resp -> {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -124,6 +133,21 @@ public class UserServices {
 			
 		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email incorreto!"));
 		
+	}
+
+	/**
+	 * Public method to get user profile.
+	 * 
+	 * @param userDto
+	 * @return ResponseEntity<UserModel>
+	 * @author Boaz
+	 * @since 1.0
+	 * 
+	 */
+	public ResponseEntity<UserModel> getProfile(String token){
+		return repository.findByToken(token)
+			.map(resp -> ResponseEntity.ok(resp))
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token invalido"));
 	}
 
 }
