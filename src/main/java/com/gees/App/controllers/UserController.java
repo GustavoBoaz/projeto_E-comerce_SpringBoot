@@ -2,6 +2,7 @@ package com.gees.App.controllers;
 
 import javax.validation.Valid;
 
+import com.gees.App.exceptions.ModelError;
 import com.gees.App.models.UserModel;
 import com.gees.App.models.dtos.UserCredentialsDTO;
 import com.gees.App.models.dtos.UserLoginDTO;
@@ -10,6 +11,7 @@ import com.gees.App.services.UserServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,8 +46,13 @@ public class UserController {
         ),
         @ApiResponse(
             responseCode = "400",
+            description = "Invalid name, email or password",
+            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ModelError.class)) }
+        ),
+        @ApiResponse(
+            responseCode = "422",
             description = "User already registered",
-            content = @Content
+            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ModelError.class)) }
         ),
         @ApiResponse(
             responseCode = "500",
@@ -54,8 +61,8 @@ public class UserController {
         )
     })
     @PostMapping
-    public ResponseEntity<UserModel> save(@Valid @RequestBody UserRegisterDTO newUser){
-    	return services.registerUser(newUser);
+    public ResponseEntity<UserModel> save(@Valid @RequestBody UserRegisterDTO newUser, Errors errors){
+    	return services.registerUser(newUser, errors);
     }
     
     @Operation(summary = "Get credentials")
@@ -67,8 +74,13 @@ public class UserController {
         ),
         @ApiResponse(
             responseCode = "400",
-            description = "Incorrect email or password",
-            content = @Content
+            description = "Email or password field is wrong",
+            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ModelError.class)) }
+        ),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Credentials email or password invalid",
+            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ModelError.class)) }
         ),
         @ApiResponse(
             responseCode = "500",
@@ -77,8 +89,8 @@ public class UserController {
         )
     })
     @PutMapping("/credentials")
-    public ResponseEntity<UserCredentialsDTO> credentials(@Valid @RequestBody UserLoginDTO user){
-    	return services.getCredentials(user);
+    public ResponseEntity<UserCredentialsDTO> credentials(@Valid @RequestBody UserLoginDTO user, Errors errors){
+    	return services.getCredentials(user, errors);
     }
 
     @Operation(summary = "Get user profile with Basic auth")
@@ -90,8 +102,13 @@ public class UserController {
         ),
         @ApiResponse(
             responseCode = "400",
-            description = "Incorrect Basic token",
-            content = @Content
+            description = "Invalid Basic token in Header",
+            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ModelError.class)) }
+        ),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Invalid Basic token in Header",
+            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ModelError.class)) }
         ),
         @ApiResponse(
             responseCode = "500",
@@ -112,9 +129,9 @@ public class UserController {
             content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserModel.class)) }
         ),
         @ApiResponse(
-            responseCode = "400",
+            responseCode = "401",
             description = "Incorrect token",
-            content = @Content
+            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ModelError.class)) }
         ),
         @ApiResponse(
             responseCode = "500",
