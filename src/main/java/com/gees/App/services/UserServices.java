@@ -7,12 +7,16 @@ import javax.validation.Valid;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.validation.Errors;
 
+import com.gees.App.exceptions.models.user.ExistingEmailException;
+import com.gees.App.exceptions.models.user.ValidLoginException;
+import com.gees.App.exceptions.models.user.ErrorInLoginException;
+import com.gees.App.exceptions.models.user.ErrorInRegistrationException;
+import com.gees.App.exceptions.models.user.ErrorInTokenException;
 import com.gees.App.models.UserModel;
 import com.gees.App.models.dtos.UserCredentialsDTO;
 import com.gees.App.models.dtos.UserLoginDTO;
@@ -89,11 +93,15 @@ public class UserServices {
 	 * @since 1.0
 	 * 
 	 */
-	public ResponseEntity<UserModel> registerUser(@Valid UserRegisterDTO newUser) {
+	public ResponseEntity<UserModel> registerUser(@Valid UserRegisterDTO newUser, Errors errors) {
+		if(errors.hasErrors()){
+			throw new ErrorInRegistrationException();
+		}
+
 		Optional<UserModel> optional = repository.findByEmail(newUser.getEmail());
 		
 		if (optional.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario ja existente, cadastre com outro email!");
+			throw new ExistingEmailException(newUser.getEmail());
 		} else {
 			user = new UserModel();
 			user.setName(newUser.getName());
@@ -114,7 +122,11 @@ public class UserServices {
 	 * @since 1.0
 	 * 
 	 */
-	public ResponseEntity<UserCredentialsDTO> getCredentials(@Valid UserLoginDTO userDto) {
+	public ResponseEntity<UserCredentialsDTO> getCredentials(@Valid UserLoginDTO userDto, Errors errors) {
+		if(errors.hasErrors()){
+			throw new ValidLoginException();
+		}
+
 		return repository.findByEmail(userDto.getEmail()).map(resp -> {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			
@@ -128,10 +140,12 @@ public class UserServices {
 				
 				return ResponseEntity.status(200).body(credentials);
 			} else {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha incorreta!");
+				throw new ErrorInLoginException("password");
 			}
 			
-		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email incorreto!"));
+		}).orElseThrow(() -> {
+			throw new ErrorInLoginException("email");
+		});
 		
 	}
 
@@ -147,7 +161,7 @@ public class UserServices {
 	public ResponseEntity<UserModel> getProfile(String token){
 		return repository.findByToken(token)
 			.map(resp -> ResponseEntity.ok(resp))
-			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token invalido"));
+			.orElseThrow(() -> new ErrorInTokenException());
 	}
 
 }
